@@ -2,7 +2,6 @@ package com.example.bullseye
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.SeekBar
 import androidx.appcompat.app.AlertDialog
 import com.example.bullseye.databinding.ActivityMainBinding
@@ -13,7 +12,10 @@ class MainActivity : AppCompatActivity() {
     private var sliderValue = 0
     private var targetValue = Random.nextInt(1, 100)
     private lateinit var binding: ActivityMainBinding
+    private var totalScore = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        supportActionBar?.hide()
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
@@ -23,7 +25,8 @@ class MainActivity : AppCompatActivity() {
         binding.targetTextView.text = targetValue.toString()
 
         binding.hitMeButton.setOnClickListener {
-            Log.i("Mega jackpot Winner", "I am Headed to greatness with Kinjoz")
+            totalScore += pointsForCurrentRound()
+            binding.gameScoreTextView?.text = totalScore.toString()
             showResult()
         }
         binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -42,8 +45,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun pointsForCurrentRound(): Int {
         val maxScore = 100
-        val differnce = abs(targetValue -sliderValue)
-        return maxScore - differnce
+        val difference = abs(targetValue -sliderValue)
+        return maxScore - difference
     }
 
     private fun showResult() {
